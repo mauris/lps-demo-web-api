@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const Parser = require(process.env.LIBRARY_DIR + '/src/parser/Parser');
 const Engine = require(process.env.LIBRARY_DIR + '/src/engine/Engine');
+
+const path = require('path');
 const fs = require('fs');
 
 module.exports = router;
@@ -26,7 +28,7 @@ router.get('/examples/:id', (req, res, next) => {
     next(new Error('Invalid parameter id'));
     return;
   }
-  let file = process.env.LIBRARY_DIR + '/examples/' + programName + '.lps'; 
+  let file = path.join(__dirname, process.env.LIBRARY_DIR + '/examples/' + programName + '.lps'); 
   fs.readFile(file, 'utf8', (err, data) => {
     if (err) {
       next(err);
