@@ -42,6 +42,9 @@ router.get('/examples/:id', (req, res, next) => {
 
 router.post('/execute', (req, res, next) => {
   let source = req.body.source;
+  if (source === undefined) {
+    source = '';
+  }
   let parser = new Parser(source);
   let programTree = parser.build();
   let engine = new Engine(programTree);
