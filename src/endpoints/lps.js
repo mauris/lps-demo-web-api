@@ -13,7 +13,10 @@ const examplePrograms = [
   'fireRecurrent',
   'mapColouring',
   'trash',
-  'dining'
+  'dining',
+  'bank',
+  'partition',
+  'bubbleSort'
 ];
 
 router.get('/examples', (req, res, next) => {
