@@ -16,6 +16,7 @@ const examplePrograms = [
   'dining',
   'bank',
   'partition',
+  'quickSort',
   'bubbleSort'
 ];
 
