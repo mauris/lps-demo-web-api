@@ -15,6 +15,7 @@ const examplePrograms = [
   'trash',
   'dining',
   'bank',
+  'prisoners',
   'partition',
   'quickSort',
   'bubbleSort'
