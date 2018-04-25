@@ -20,7 +20,8 @@ const examplePrograms = [
   'quickSort',
   'bubbleSort',
   'mark-hiccup',
-  'guard'
+  'guard',
+  'turing'
 ];
 
 router.get('/examples', (req, res, next) => {
