@@ -55,11 +55,14 @@ router.post('/execute', (req, res, next) => {
   if (source === undefined) {
     source = '';
   }
+  const startTime = process.hrtime();
   let parser = new Parser(source);
   let programTree = parser.build();
   let engine = new Engine(programTree);
   let result = engine.run();
+  const diff = process.hrtime(startTime);
   res.json({
-    result: result
+    result: result,
+    time: diff[0] + 's ' + (diff[1]/1000000) + 'ms'
   });
 });
