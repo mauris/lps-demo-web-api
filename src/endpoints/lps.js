@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Parser = require(process.env.LIBRARY_DIR + '/src/parser/Parser');
+const Program = require(process.env.LIBRARY_DIR + '/src/parser/Program');
 const Engine = require(process.env.LIBRARY_DIR + '/src/engine/Engine');
 
 const path = require('path');
@@ -56,13 +56,33 @@ router.post('/execute', (req, res, next) => {
     source = '';
   }
   const startTime = process.hrtime();
-  let parser = new Parser(source);
-  let programTree = parser.build();
-  let engine = new Engine(programTree);
-  let result = engine.run();
-  const diff = process.hrtime(startTime);
-  res.json({
-    result: result,
-    time: diff[0] + 's ' + (diff[1]/1000000) + 'ms'
-  });
+  Program.fromString(source)
+    .then((program) => {
+      let engine = new Engine(program);
+      
+      let result = [];
+      
+      engine.setContinuousExecution(true);
+      
+      engine.on('postStep', () => {
+        result.push({
+          time: engine.getCurrentTime(),
+          fluents: engine.getActiveFluents(),
+          actions: engine.getLastStepActions(),
+          observations: engine.getLastStepObservations()
+        });
+      });
+      
+      engine.on('done', () => {
+        const diff = process.hrtime(startTime);
+        res.json({
+          result: result,
+          time: diff[0] + 's ' + (diff[1]/1000000) + 'ms'
+        });
+      });
+      
+      engine.on('ready', () => {
+        engine.run();
+      });
+    });
 });
