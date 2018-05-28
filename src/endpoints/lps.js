@@ -64,7 +64,7 @@ router.post('/execute', (req, res, next) => {
       
       engine.setContinuousExecution(true);
       
-      engine.on('postStep', () => {
+      engine.on('postCycle', () => {
         result.push({
           time: engine.getCurrentTime(),
           fluents: engine.getActiveFluents(),
