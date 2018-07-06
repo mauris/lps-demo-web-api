@@ -57,7 +57,8 @@ router.post('/execute', (req, res, next) => {
   }
   const startTime = process.hrtime();
   Program.fromString(source)
-    .then((engine) => {
+    .then((program) => {
+      let engine = new Engine(program);
       
       let result = [];
       
