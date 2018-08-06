@@ -136,7 +136,6 @@ router.post('/execute', (req, res, next) => {
           });
           for (let j = i + 1; j <= furtherstCycle; j += 1) {
             result[j].overlappingFluents += result[i].overlappingFluents;
-            console.log('adding ' + result[i].overlappingFluents + ' to ' + j);
           }
           newFluents.sort((a, b) => {
             if (a.length === b.length) {
