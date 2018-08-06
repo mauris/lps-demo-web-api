@@ -10,21 +10,21 @@ module.exports = router;
 
 const examplePrograms = [
   'mark',
+  'mark-hiccup',
   'fireSimple',
   'fireRecurrent',
   'mapColouring',
   'trash',
   'dining',
   'bank',
+  'dinner',
   'prisoners',
   'partition',
   'quickSort',
   'bubbleSort',
-  'mark-hiccup',
   'guard',
   'turing',
-  'towers-simple',
-  'towers'
+  'towers-simple'
 ];
 
 router.get('/examples', (req, res, next) => {
