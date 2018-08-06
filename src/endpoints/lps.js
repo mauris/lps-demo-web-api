@@ -61,6 +61,7 @@ router.post('/execute', (req, res, next) => {
       let engine = new Engine(program);
       
       let result = [];
+      let hasResponded = false;
       
       engine.setContinuousExecution(true);
       
@@ -71,6 +72,19 @@ router.post('/execute', (req, res, next) => {
           actions: engine.getLastStepActions(),
           observations: engine.getLastStepObservations()
         });
+      });
+      
+      engine.on('error', (err) => {
+        if (hasResponded) {
+          return;
+        }
+        hasResponded = true;
+        res
+          .status(500)
+          .json({
+            status: 'error',
+            msg: err
+          });
       });
       
       engine.on('done', () => {
@@ -84,5 +98,13 @@ router.post('/execute', (req, res, next) => {
       engine.on('ready', () => {
         engine.run();
       });
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .json({
+          status: 'error',
+          msg: err
+        });
     });
 });
