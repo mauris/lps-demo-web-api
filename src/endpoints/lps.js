@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const LPS = require(process.env.LIBRARY_DIR + '/src/LPS');
 const Program = require(process.env.LIBRARY_DIR + '/src/parser/Program');
 const Engine = require(process.env.LIBRARY_DIR + '/src/engine/Engine');
 
