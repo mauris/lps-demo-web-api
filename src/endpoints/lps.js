@@ -90,6 +90,63 @@ router.post('/execute', (req, res, next) => {
       
       engine.on('done', () => {
         const diff = process.hrtime(startTime);
+        
+        let maxCycles = result.length;
+        for (let i = 0; i < maxCycles; i += 1) {
+          result[i].fluents = result[i].fluents
+            .map((f) => {
+              let fluent = LPS.literal(f);
+              let fluentArgs = fluent.getArguments();
+              fluentArgs.splice(-1);
+              let unstampedFluent = new LPS.Functor(fluent.getName(), fluentArgs);
+              return {
+                term: unstampedFluent.toString(),
+                length: 1
+              };
+            });
+          result[i].overlappingFluents = 0;
+        }
+        
+        for (let i = 0; i < maxCycles; i += 1) {
+          let newFluents = [];
+          let furtherstCycle = i;
+          result[i].fluents
+            .forEach((fArg) => {
+              let f = fArg;
+              for (let j = i + 1; j < maxCycles; j += 1) {
+                let hasSameFluent = false;
+                result[j].fluents = result[j].fluents
+                  .filter((otherF) => {
+                    if (otherF.term === f.term) {
+                      result[j].overlappingFluents += 1;
+                      f.length += 1;
+                      hasSameFluent = true;
+                      return false;
+                    }
+                    return true;
+                  });
+                if (!hasSameFluent) {
+                  break;
+                }
+                if (j > furtherstCycle) {
+                  furtherstCycle = j;
+                }
+              }
+              newFluents.push(f);
+          });
+          for (let j = i + 1; j <= furtherstCycle; j += 1) {
+            result[j].overlappingFluents += result[i].overlappingFluents;
+            console.log('adding ' + result[i].overlappingFluents + ' to ' + j);
+          }
+          newFluents.sort((a, b) => {
+            if (a.length === b.length) {
+              return 0;
+            }
+            return a.length > b.length ? -1 : 1;
+          });
+          result[i].fluents = newFluents;
+        }
+        
         res.json({
           result: result,
           time: diff[0] + 's ' + (diff[1]/1000000) + 'ms'
