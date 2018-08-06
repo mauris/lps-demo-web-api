@@ -109,7 +109,12 @@ router.post('/execute', (req, res, next) => {
         
         for (let i = 0; i < maxCycles; i += 1) {
           let newFluents = [];
-          let furtherstCycle = i;
+          let lastSeenCycle = i;
+          let numInCycle = {};
+          
+          for (let j = i + 1; j < maxCycles; j += 1) {
+            numInCycle[j] = 0;
+          }
           result[i].fluents
             .forEach((fArg) => {
               let f = fArg;
@@ -118,7 +123,7 @@ router.post('/execute', (req, res, next) => {
                 result[j].fluents = result[j].fluents
                   .filter((otherF) => {
                     if (otherF.term === f.term) {
-                      result[j].overlappingFluents += 1;
+                      numInCycle[j] += 1;
                       f.length += 1;
                       hasSameFluent = true;
                       return false;
@@ -128,15 +133,15 @@ router.post('/execute', (req, res, next) => {
                 if (!hasSameFluent) {
                   break;
                 }
-                if (j > furtherstCycle) {
-                  furtherstCycle = j;
+                if (j > lastSeenCycle) {
+                  lastSeenCycle = j;
                 }
+              }
+              for (let j = i + 1; j <= lastSeenCycle; j += 1) {
+                result[j].overlappingFluents = result[i].overlappingFluents + numInCycle[j];
               }
               newFluents.push(f);
           });
-          for (let j = i + 1; j <= furtherstCycle; j += 1) {
-            result[j].overlappingFluents += result[i].overlappingFluents;
-          }
           newFluents.sort((a, b) => {
             if (a.length === b.length) {
               return 0;
