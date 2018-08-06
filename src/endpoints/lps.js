@@ -70,8 +70,8 @@ router.post('/execute', (req, res, next) => {
         result.push({
           time: engine.getCurrentTime(),
           fluents: engine.getActiveFluents(),
-          actions: engine.getLastStepActions(),
-          observations: engine.getLastStepObservations()
+          actions: engine.getLastCycleActions(),
+          observations: engine.getLastCycleObservations()
         });
       });
       
