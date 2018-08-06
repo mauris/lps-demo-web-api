@@ -84,7 +84,7 @@ router.post('/execute', (req, res, next) => {
           .status(500)
           .json({
             status: 'error',
-            msg: err
+            msg: '' + err
           });
       });
       
@@ -105,7 +105,7 @@ router.post('/execute', (req, res, next) => {
         .status(500)
         .json({
           status: 'error',
-          msg: err
+          msg: '' + err
         });
     });
 });
