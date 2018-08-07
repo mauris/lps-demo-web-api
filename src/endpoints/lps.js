@@ -24,7 +24,8 @@ const examplePrograms = [
   'bubbleSort',
   'guard',
   'turing',
-  'towers-simple'
+  'towers-simple',
+  'towers'
 ];
 
 router.get('/examples', (req, res, next) => {
