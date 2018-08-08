@@ -18,6 +18,7 @@ const examplePrograms = [
   'dining',
   'bank',
   'dinner',
+  'shopping',
   'prisoners',
   'partition',
   'quickSort',
