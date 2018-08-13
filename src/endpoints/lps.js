@@ -159,9 +159,7 @@ router.post('/execute', (req, res, next) => {
         });
       });
 
-      engine.on('ready', () => {
-        engine.run();
-      });
+      engine.run();
     })
     .catch((err) => {
       res
