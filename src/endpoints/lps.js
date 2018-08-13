@@ -1,7 +1,5 @@
 const router = require('express').Router();
 const LPS = require(process.env.LIBRARY_DIR + '/src/LPS');
-const Program = require(process.env.LIBRARY_DIR + '/src/parser/Program');
-const Engine = require(process.env.LIBRARY_DIR + '/src/engine/Engine');
 
 const path = require('path');
 const fs = require('fs');
@@ -29,19 +27,21 @@ const examplePrograms = [
   'towers'
 ];
 
+// eslint-disable-next-line no-unused-vars
 router.get('/examples', (req, res, next) => {
   res.json({
     result: examplePrograms
   });
 });
 
+// eslint-disable-next-line no-unused-vars
 router.get('/examples/:id', (req, res, next) => {
   let programName = examplePrograms[Number(req.params.id)];
   if (programName === undefined) {
     next(new Error('Invalid parameter id'));
     return;
   }
-  let file = path.join(__dirname, process.env.LIBRARY_DIR + '/examples/' + programName + '.lps'); 
+  let file = path.join(__dirname, process.env.LIBRARY_DIR + '/examples/' + programName + '.lps');
   fs.readFile(file, 'utf8', (err, data) => {
     if (err) {
       next(err);
@@ -53,21 +53,20 @@ router.get('/examples/:id', (req, res, next) => {
   });
 });
 
+// eslint-disable-next-line no-unused-vars
 router.post('/execute', (req, res, next) => {
   let source = req.body.source;
   if (source === undefined) {
     source = '';
   }
   const startTime = process.hrtime();
-  Program.fromString(source)
-    .then((program) => {
-      let engine = new Engine(program);
-      
+  LPS.loadString(source)
+    .then((engine) => {
       let result = [];
       let hasResponded = false;
-      
+
       engine.setContinuousExecution(true);
-      
+
       engine.on('postCycle', () => {
         result.push({
           time: engine.getCurrentTime(),
@@ -77,7 +76,7 @@ router.post('/execute', (req, res, next) => {
           duration: engine.getLastCycleExecutionTime()
         });
       });
-      
+
       engine.on('error', (err) => {
         if (hasResponded) {
           return;
@@ -90,10 +89,10 @@ router.post('/execute', (req, res, next) => {
             msg: '' + err
           });
       });
-      
+
       engine.on('done', () => {
         const diff = process.hrtime(startTime);
-        
+
         // this section processes the timeline and ensures
         // no overlapping when displaying fluents
         let maxCycles = result.length;
@@ -107,12 +106,12 @@ router.post('/execute', (req, res, next) => {
             });
           result[i].overlappingFluents = 0;
         }
-        
+
         for (let i = 0; i < maxCycles; i += 1) {
           let newFluents = [];
           let lastSeenCycle = i;
           let numInCycle = {};
-          
+
           for (let j = i + 1; j < maxCycles; j += 1) {
             numInCycle[j] = 0;
           }
@@ -144,7 +143,7 @@ router.post('/execute', (req, res, next) => {
                     + numInCycle[j];
               }
               newFluents.push(f);
-          });
+            });
           newFluents.sort((a, b) => {
             if (a.length === b.length) {
               return 0;
@@ -153,13 +152,13 @@ router.post('/execute', (req, res, next) => {
           });
           result[i].fluents = newFluents;
         }
-        
+
         res.json({
           result: result,
-          time: diff[0] + 's ' + (diff[1]/1000000) + 'ms'
+          time: diff[0] + 's ' + (diff[1] / 1000000) + 'ms'
         });
       });
-      
+
       engine.on('ready', () => {
         engine.run();
       });
