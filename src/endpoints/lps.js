@@ -94,16 +94,14 @@ router.post('/execute', (req, res, next) => {
       engine.on('done', () => {
         const diff = process.hrtime(startTime);
         
+        // this section processes the timeline and ensures
+        // no overlapping when displaying fluents
         let maxCycles = result.length;
         for (let i = 0; i < maxCycles; i += 1) {
           result[i].fluents = result[i].fluents
             .map((f) => {
-              let fluent = LPS.literal(f);
-              let fluentArgs = fluent.getArguments();
-              fluentArgs.splice(-1);
-              let unstampedFluent = new LPS.Functor(fluent.getName(), fluentArgs);
               return {
-                term: unstampedFluent.toString(),
+                term: f,
                 length: 1
               };
             });
@@ -141,7 +139,9 @@ router.post('/execute', (req, res, next) => {
                 }
               }
               for (let j = i + 1; j <= lastSeenCycle; j += 1) {
-                result[j].overlappingFluents = result[i].overlappingFluents + numInCycle[j];
+                result[j].overlappingFluents
+                  = result[i].overlappingFluents
+                    + numInCycle[j];
               }
               newFluents.push(f);
           });
