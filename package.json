@@ -1,15 +1,25 @@
 {
-  "name": "aps-web",
+  "name": "lps-demo-web-api",
   "version": "1.0.0",
-  "private": true,
   "main": "bin/www",
   "scripts": {
     "start": "node bin/www",
     "test": "nyc mocha --exit --require test/init.js \"test/**/*.test.js\"",
     "lint": "eslint test src"
   },
+  "homepage": "https://github.com/mauris/lps-demo-web-api",
+  "repository": "https://github.com/mauris/lps-demo-web-api.git",
+  "bugs": {
+    "url": "https://github.com/mauris/lps-demo-web-api/issues"
+  },
+  "private": true,
+  "author": {
+    "name": "Sam Yong",
+    "email": "samyonggit@gmail.com",
+    "url": "http://mauris.sg/"
+  },
+  "license": "BSD-3-Clause",
   "dependencies": {
-    "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "debug": "^2.6.9",
