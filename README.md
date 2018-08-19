@@ -1,6 +1,8 @@
-Web App
+# lps.js Demo Web App (Server-side)
 
-# Set up
+This repository holds the server-side web app for the [lps.js](https://github.com/mauris/lps.js) demonstration website. This web app is made using Express.js Framework. The frontend repository of the web app can be found at https://github.com/mauris/lps-demo-web
+
+### Set up
 
 After cloning the repository, you need to install the dependencies described in `package.json` by running the command:
 
@@ -8,16 +10,14 @@ After cloning the repository, you need to install the dependencies described in 
     
 Whenever `package.json` gets modified, you should run `npm i` to install new dependencies or update existing ones.
 
-# Configuring the Server Environment
+Ensure that a copy of lps.js's repository is cloned to `lps` folder next to `lps-demo-web-api`.
+
+### Configuring the Server Environment
 
 Make a copy of of `sample.env` and rename it to `.env` ; this is a file containing Server Environment directory used by the scripts.
-
-At the same file directory level as '/aps-app' and '/web' :
-
-    $ mkdir storage //serves as storage directory
     
 
-# Running Web App
+### Running Web App
 
 To run the web app, run the command:
 
@@ -31,7 +31,7 @@ If you're in development environment and would like the app to restart whenever 
     
 After installing `nodemon`, you can use `nodemon` instead of `npm start` to monitor and restart the web app as needed.
 
-# Running Tests
+### Running Tests
 
 To run tests, run the command:
 
@@ -39,10 +39,15 @@ To run tests, run the command:
     
 We're writing unit tests using Mocha unit testing framework. Test files are found in the `test` folder.
     
-# Code Linting
+### Code Linting
 
 To run code linting, run the command:
 
     $ npm run lint
     
 Code linting tool we're using is ESLint.
+
+
+# License
+
+The lps.js demo web app is open source and licensed under the BSD 3-Clause. The implementation depends on the LPS runtime [lps.js](https://github.com/mauris/lps.js). lps.js was implemented as part of Sam Yong's MSc Computer Science Individual Project and thesis at Imperial College London in 2018.
