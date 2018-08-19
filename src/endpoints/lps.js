@@ -3,6 +3,8 @@ const LPS = require('lps');
 const path = require('path');
 const fs = require('fs');
 
+const examplesPath = '../../../lps/examples/';
+
 module.exports = router;
 
 const examplePrograms = [
@@ -40,7 +42,7 @@ router.get('/examples/:id', (req, res, next) => {
     next(new Error('Invalid parameter id'));
     return;
   }
-  let file = path.join(__dirname, process.env.LIBRARY_DIR + '/examples/' + programName + '.lps');
+  let file = path.join(__dirname, examplesPath + programName + '.lps');
   fs.readFile(file, 'utf8', (err, data) => {
     if (err) {
       next(err);
