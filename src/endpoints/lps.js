@@ -1,6 +1,5 @@
 const router = require('express').Router();
-const LPS = require(process.env.LIBRARY_DIR + '/src/LPS');
-
+const LPS = require('lps');
 const path = require('path');
 const fs = require('fs');
 
