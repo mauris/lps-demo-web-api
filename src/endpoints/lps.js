@@ -63,6 +63,7 @@ router.post('/execute', (req, res, next) => {
   const startTime = process.hrtime();
   LPS.loadString(source)
     .then((engine) => {
+      let profiler = engine.getProfiler();
       let result = [];
       let hasResponded = false;
 
@@ -74,7 +75,7 @@ router.post('/execute', (req, res, next) => {
           fluents: engine.getActiveFluents(),
           actions: engine.getLastCycleActions(),
           observations: engine.getLastCycleObservations(),
-          duration: engine.getLastCycleExecutionTime()
+          duration: profiler.get('lastCycleExecutionTime')
         });
       });
 
